@@ -27,7 +27,7 @@ public class UsuarioController {
         }
     }
 
-    @PostMapping(value = "registrar", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/registrar", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UsuarioDTO> registrar(@RequestBody UsuarioDTO usuario, BindingResult binding) {
         if (binding.hasErrors()) {
             return new ResponseEntity<>(HttpStatus.SERVICE_UNAVAILABLE);
