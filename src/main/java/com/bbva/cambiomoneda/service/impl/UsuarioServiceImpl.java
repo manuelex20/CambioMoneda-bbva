@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UsuarioServiceImpl implements UsuarioService {
@@ -29,5 +30,14 @@ public class UsuarioServiceImpl implements UsuarioService {
     public UsuarioDTO guardar(UsuarioDTO usuario) {
         Usuario entidadUsuario = usuarioRepository.save(usuarioMapper.toEntity(usuario));
         return usuarioMapper.toDTO(entidadUsuario);
+    }
+
+    @Override
+    public UsuarioDTO findByCorreo(String correo) {
+        Optional<Usuario> usuario = usuarioRepository.findByCorreo(correo);
+        if (usuario.isPresent()) {
+            return usuarioMapper.toDTO(usuario.get());
+        } else
+            return null;
     }
 }

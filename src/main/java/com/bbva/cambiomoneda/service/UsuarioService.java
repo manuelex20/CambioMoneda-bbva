@@ -8,4 +8,6 @@ public interface UsuarioService {
     List<UsuarioDTO> listar();
 
     UsuarioDTO guardar(UsuarioDTO usuario);
+
+    UsuarioDTO findByCorreo(String correo);
 }

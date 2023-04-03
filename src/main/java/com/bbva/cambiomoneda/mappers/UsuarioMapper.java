@@ -22,7 +22,7 @@ public interface UsuarioMapper {
     UsuarioDTO toDTO(Usuario u);
 
     default List<Usuario> toEntity(List<UsuarioDTO> listaUsuariosDTO) {
-        return listaUsuariosDTO.stream().map(dto -> toEntity(dto)).toList();
+        return listaUsuariosDTO.stream().map(this::toEntity).toList();
     }
 
     default List<UsuarioDTO> toDTO(List<Usuario> listaUsuarios) {

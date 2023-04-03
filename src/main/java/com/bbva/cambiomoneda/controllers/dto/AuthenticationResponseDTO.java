@@ -3,11 +3,12 @@ package com.bbva.cambiomoneda.controllers.dto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Builder
 @AllArgsConstructor
-public class RolDTO {
-    private int id;
-    private String nombre;
+@NoArgsConstructor
+public class AuthenticationResponseDTO {
+    private String token;
 }
