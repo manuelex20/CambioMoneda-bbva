@@ -103,4 +103,13 @@ public class MonedaController {
         return new ResponseEntity<>(monedaActualizada, HttpStatus.OK);
     }
 
+    @GetMapping(value = "/buscar/{moneda}")
+    public ResponseEntity<MonedaDTO> buscar(@PathVariable String moneda){
+        MonedaDTO monedaDTO = monedaService.obtenerPorNombre(moneda);
+        if(monedaDTO==null){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }else{
+            return new ResponseEntity<>(monedaDTO,HttpStatus.OK);
+        }
+    }
 }
