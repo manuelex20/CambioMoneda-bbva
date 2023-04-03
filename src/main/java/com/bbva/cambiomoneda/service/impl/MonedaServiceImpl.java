@@ -37,4 +37,9 @@ public class MonedaServiceImpl implements MonedaService {
     public MonedaDTO guardar(MonedaDTO monedaDTO) {
         return monedaMapper.toDTO(monedaRepository.save(monedaMapper.toEntity(monedaDTO)));
     }
+
+    @Override
+    public MonedaDTO actualizar(MonedaDTO monedaDTO) {
+        return monedaMapper.toDTO(monedaRepository.save(monedaMapper.toEntity(monedaDTO)));
+    }
 }

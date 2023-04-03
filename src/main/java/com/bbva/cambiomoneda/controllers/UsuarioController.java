@@ -6,6 +6,8 @@ import com.bbva.cambiomoneda.controllers.dto.UsuarioDTO;
 import com.bbva.cambiomoneda.mappers.UsuarioMapper;
 import com.bbva.cambiomoneda.service.JwtService;
 import com.bbva.cambiomoneda.service.UsuarioService;
+import jakarta.servlet.http.HttpSession;
+import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -21,6 +23,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/usuario")
+@CrossOrigin("*")
 public class UsuarioController {
 
     @Autowired
@@ -33,6 +36,8 @@ public class UsuarioController {
     private AuthenticationManager authenticationManager;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    ObjectFactory<HttpSession> httpSessionFactory;
 
     @GetMapping(value = "/listar", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<UsuarioDTO>> listar() {
@@ -70,6 +75,7 @@ public class UsuarioController {
         ));
         var user = usuarioService.findByCorreo(request.getCorreo());
         if (user != null) {
+            httpSessionFactory.getObject().setAttribute("usuario", user);
             String jwtToken = jwtService.generateToken(usuarioMapper.toEntity(user));
             AuthenticationResponseDTO response = AuthenticationResponseDTO
                     .builder()

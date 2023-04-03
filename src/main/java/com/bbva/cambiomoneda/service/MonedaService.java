@@ -11,4 +11,6 @@ public interface MonedaService {
     MonedaDTO obtenerPorNombre(String monedalocal);
 
     MonedaDTO guardar(MonedaDTO monedaDTO);
+
+    MonedaDTO actualizar(MonedaDTO monedaDTO);
 }

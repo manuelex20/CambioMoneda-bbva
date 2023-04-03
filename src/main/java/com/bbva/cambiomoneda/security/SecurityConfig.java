@@ -23,12 +23,14 @@ public class SecurityConfig {
 
     @Autowired
     private JwtAuthenticationFilter jwtAuthenticationFilter;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf().disable()
+                .cors().disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/usuario/registrar","/usuario/login")
+                .requestMatchers("/usuario/registrar", "/usuario/login")
                 .permitAll()
                 .anyRequest()
                 .authenticated()
