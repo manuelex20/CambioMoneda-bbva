@@ -54,8 +54,12 @@ public class UsuarioController {
             return new ResponseEntity<>(HttpStatus.SERVICE_UNAVAILABLE);
         } else {
             try {
-                usuario.setClave(passwordEncoder.encode(usuario.getClave()));
+                UsuarioDTO usuarioDTODNI = usuarioService.findByDNI(usuario.getDni());
+                if (usuarioDTODNI != null) {
+                    return new ResponseEntity<>(HttpStatus.CONFLICT);
+                }
 
+                usuario.setClave(passwordEncoder.encode(usuario.getClave()));
                 UsuarioDTO usuarioDTOguardado = usuarioService.guardar(usuario);
 
                 String jwtToken = jwtService.generateToken(usuarioMapper.toEntity(usuarioDTOguardado));
@@ -84,7 +88,7 @@ public class UsuarioController {
             return new ResponseEntity<AuthenticationResponseDTO>(response, HttpStatus.OK);
 
         } else {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 

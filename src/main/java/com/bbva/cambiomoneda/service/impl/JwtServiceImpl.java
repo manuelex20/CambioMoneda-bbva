@@ -22,6 +22,8 @@ public class JwtServiceImpl implements JwtService {
     @Value("${app.jwt-secret}")
     private String secret;
 
+    @Value("${app.jwt-expiration-milliseconds}")
+    private long tiempoDeSesion;
 
     @Override
     public String obtenerCorreo(String token) {
@@ -29,8 +31,12 @@ public class JwtServiceImpl implements JwtService {
     }
 
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
-        final Claims claims = extractAllClaims(token);
-        return claimsResolver.apply(claims);
+        try {
+            final Claims claims = extractAllClaims(token);
+            return claimsResolver.apply(claims);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
@@ -39,7 +45,7 @@ public class JwtServiceImpl implements JwtService {
                 .setClaims(extraClaims)
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24))
+                .setExpiration(new Date(System.currentTimeMillis() + tiempoDeSesion))
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
@@ -62,12 +68,17 @@ public class JwtServiceImpl implements JwtService {
     }
 
     private Claims extractAllClaims(String token) {
-        return Jwts
-                .parserBuilder()
-                .setSigningKey(getSignInKey())
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
+        try {
+            return Jwts
+                    .parserBuilder()
+                    .setSigningKey(getSignInKey())
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+        } catch (Exception e) {
+            System.out.println("error: " + e.getMessage());
+        }
+        return null;
     }
 
     private Key getSignInKey() {

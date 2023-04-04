@@ -40,4 +40,13 @@ public class UsuarioServiceImpl implements UsuarioService {
         } else
             return null;
     }
+
+    @Override
+    public UsuarioDTO findByDNI(String dni) {
+        Optional<Usuario> usuario = usuarioRepository.findBydni(dni);
+        if (usuario.isPresent()) {
+            return usuarioMapper.toDTO(usuario.get());
+        } else
+            return null;
+    }
 }

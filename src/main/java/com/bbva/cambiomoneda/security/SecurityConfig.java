@@ -26,8 +26,8 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        return http
-                .csrf().disable()
+        return http.csrf().disable().build();
+                /*.csrf().disable()
                 .cors().disable()
                 .authorizeHttpRequests()
                 .requestMatchers("/usuario/registrar", "/usuario/login")
@@ -40,7 +40,7 @@ public class SecurityConfig {
                 .and()
                 .authenticationProvider(authenticaterProvider)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-                .build();
+                .build();*/
 
     }
 }

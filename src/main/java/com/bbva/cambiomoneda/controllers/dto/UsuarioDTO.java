@@ -10,4 +10,5 @@ public class UsuarioDTO {
     private String correo;
     private String clave;
     private RolDTO rol;
+    private String dni;
 }

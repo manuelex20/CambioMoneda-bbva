@@ -10,4 +10,6 @@ public interface UsuarioService {
     UsuarioDTO guardar(UsuarioDTO usuario);
 
     UsuarioDTO findByCorreo(String correo);
+
+    UsuarioDTO findByDNI(String dni);
 }

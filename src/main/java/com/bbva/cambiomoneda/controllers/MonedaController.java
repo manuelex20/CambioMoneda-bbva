@@ -45,6 +45,11 @@ public class MonedaController {
 
     @PostMapping(value = "/registrar")
     public ResponseEntity<MonedaDTO> registrar(@RequestBody MonedaDTO monedaDTO) {
+        MonedaDTO monedaBuscada = monedaService.obtenerPorNombre(monedaDTO.getNombre());
+        if (monedaBuscada != null) {
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
+
         MonedaDTO monedaGuardada = monedaService.guardar(monedaDTO);
         return new ResponseEntity<>(monedaGuardada, HttpStatus.OK);
     }
@@ -75,6 +80,20 @@ public class MonedaController {
                 .monto(montoFinal)
                 .monedas(monedaLocal.getNombre() + "->" + monedaDestino.getNombre())
                 .build();
+        UsuarioDTO usuarioDTOSession = (UsuarioDTO) httpSessionFactory.getObject().getAttribute("usuario");
+        if (usuarioDTOSession == null) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
+        AuditoriaDTO auditoriaDTO = AuditoriaDTO
+                .builder()
+                .detalle(solicitudCambioDTO.getMonto() + " " + monedaLocal.getNombre() + "->" + montoFinal + " " + monedaDestino.getNombre() + " ")
+                .nombre_usuario(usuarioDTOSession.getNombre())
+                .fecha_hora(LocalDateTime.now()).build();
+
+        auditoriaService.guardar(auditoriaDTO);
+
+
         return new ResponseEntity<>(dtoRespuesta, HttpStatus.OK);
     }
 
@@ -104,12 +123,12 @@ public class MonedaController {
     }
 
     @GetMapping(value = "/buscar/{moneda}")
-    public ResponseEntity<MonedaDTO> buscar(@PathVariable String moneda){
+    public ResponseEntity<MonedaDTO> buscar(@PathVariable String moneda) {
         MonedaDTO monedaDTO = monedaService.obtenerPorNombre(moneda);
-        if(monedaDTO==null){
+        if (monedaDTO == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }else{
-            return new ResponseEntity<>(monedaDTO,HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(monedaDTO, HttpStatus.OK);
         }
     }
 }
